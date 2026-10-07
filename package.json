@@ -1,6 +1,6 @@
 {
   "name": "@justarobot/app-kit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Code shared by the justarobot apps: ops alert mails and the Shopify malformed-host guard.",
   "license": "MIT",
   "type": "module",

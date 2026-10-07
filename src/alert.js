@@ -58,6 +58,15 @@ export function routeOf(pathname) {
     .join("/");
 }
 
+/** The path of a request URL — also of one too broken for `new URL()`, which is often why we're alerting. */
+function pathOf(url) {
+  try {
+    return new URL(url, "http://localhost").pathname;
+  } catch {
+    return String(url).split("?")[0];
+  }
+}
+
 /** Only the "at …" lines: code locations, never data. */
 function frames(error) {
   return error instanceof Error && error.stack
@@ -77,7 +86,7 @@ export function createAlerter({ app }) {
       if (!isAlertWorthy(error, context.request)) return;
       const message = scrub(error instanceof Error ? error.message : String(error));
       const req = context.request;
-      const route = req ? `${req.method} ${routeOf(new URL(req.url, "http://localhost").pathname)}` : "-";
+      const route = req ? `${req.method} ${routeOf(pathOf(req.url))}` : "-";
       if (!shouldSend(`${route} ${message}`, Date.now(), lastSent)) return;
       const incident = randomUUID().slice(0, 8);
       // Full context stays in our own log, findable by the incident id.

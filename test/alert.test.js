@@ -88,6 +88,15 @@ test("accepts a node:http request (relative url) and stays quiet when the same e
   assert.match(posted[0].body.text, /Route: POST \/api\/license\n/);
 });
 
+test("still alerts when the request URL itself is unparseable", async () => {
+  const posted = await capture(async () => {
+    process.env.RESEND_API_KEY = "re_test";
+    await createAlerter({ app: "demo" })(new TypeError("Invalid URL"), { request: { method: "GET", url: "//[x?a=1" } });
+  });
+  assert.equal(posted.length, 1);
+  assert.match(posted[0].body.text, /Route: GET \/\/\[x\n/);
+});
+
 test("without RESEND_API_KEY it only logs", async () => {
   const posted = await capture(async () => {
     delete process.env.RESEND_API_KEY;
