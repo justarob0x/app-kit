@@ -7,6 +7,7 @@ Plain ESM JavaScript with hand-written types: no build step and no dependencies.
 |---|---|
 | `@justarobot/app-kit/alert` | `createAlerter({ app })` → `alertOps(error, { request?, shop? })`: server errors mail ops@ via Resend (`RESEND_API_KEY`), scrubbed, one mail per error per hour. Works with Fetch `Request` and `node:http` requests. |
 | `@justarobot/app-kit/host-guard` | `guardHost(shopify.authenticate.admin)`: a malformed `host` param answers 400 instead of 500. |
+| `@justarobot/app-kit/siblings` | `siblings({ app, platform?, lang?, country? })` → `[{ id, name, url, text }]`: the other apps to show inside an app. Same audience only, store-listing links only, filtered by shop country. Each app renders the list itself. |
 
 ## Install
 

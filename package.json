@@ -1,7 +1,7 @@
 {
   "name": "@justarobot/app-kit",
-  "version": "1.0.1",
-  "description": "Code shared by the justarobot apps: ops alert mails and the Shopify malformed-host guard.",
+  "version": "1.1.0",
+  "description": "Code shared by the justarobot apps: ops alert mails, the Shopify malformed-host guard and the list of sibling apps.",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -12,6 +12,10 @@
     "./host-guard": {
       "types": "./src/host-guard.d.ts",
       "default": "./src/host-guard.js"
+    },
+    "./siblings": {
+      "types": "./src/siblings.d.ts",
+      "default": "./src/siblings.js"
     }
   },
   "files": ["src"],
