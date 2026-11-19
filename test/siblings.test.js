@@ -18,10 +18,20 @@ test("an app without a store listing shows the others but is not shown", () => {
   assert.ok(!ids({ app: "datev-export" }).includes("oss-report"));
 });
 
-test("on Wix only apps with a Wix listing appear, linked to the Wix App Market", () => {
+test("on Wix every app links to the Wix App Market and carries its Wix listing name", () => {
   const list = siblings({ app: "eu-compliance-kit", platform: "wix" });
-  assert.deepEqual(list.map((a) => a.id), ["datev-export"]);
-  assert.ok(list[0].url.startsWith("https://www.wix.com/app-market/"));
+  assert.deepEqual(list.map((a) => a.id), ["datev-export", "lucid-report", "oss-report"]);
+  for (const a of list) assert.ok(a.url.startsWith("https://www.wix.com/app-market/"), a.id);
+  assert.equal(list[1].name, "LUCID Report");
+  assert.equal(siblings({ app: "eu-compliance-kit" })[1].name, "LUCID Verpackungsgesetz Report");
+  assert.deepEqual(ids({ app: "eu-compliance-kit", platform: "wix", country: "AT" }), ["bmd-export", "lucid-report", "oss-report"]);
+});
+
+test("OSS Report is not offered inside the apps that produce the OSS return themselves", () => {
+  assert.deepEqual(ids({ app: "datev-export", platform: "wix" }), ["eu-compliance-kit", "lucid-report"]);
+  assert.deepEqual(ids({ app: "bmd-export", platform: "wix", country: "AT" }), ["eu-compliance-kit", "lucid-report"]);
+  assert.deepEqual(ids({ app: "oss-report", platform: "wix" }), ["eu-compliance-kit", "datev-export", "lucid-report"]);
+  assert.deepEqual(ids({ app: "lucid-report", platform: "wix" }), ["eu-compliance-kit", "datev-export", "oss-report"]);
 });
 
 test("the meat app and the EU apps do not advertise each other", () => {
@@ -39,6 +49,7 @@ test("text follows the language and every shown app has text and an https store 
           assert.ok(a.text.length > 10, `${a.id} ${lang}`);
           assert.match(a.url, /^https:\/\/apps\.shopify\.com\//);
         }
+        for (const a of siblings({ app, lang, country, platform: "wix" })) assert.ok(a.text.length > 10, `${a.id} ${lang} wix`);
       }
     }
   }
